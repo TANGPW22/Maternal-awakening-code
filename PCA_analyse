@@ -1,0 +1,56 @@
+clc,clear
+data = xlsread('F:\pup awake\modle\PCA.xlsx');%从excel中导入原始数据
+data_z =zscore(data);
+
+% %outside
+% data_out=data(1:350,10:40);
+% data_nest=data(1:350,50:end);
+
+%inside
+data_out=data(1:350,50:80);
+data_nest=data(1:350,120:150);
+
+
+k=2;  %将样本降到k维参数设置
+%% 使用Matlab工具箱princomp函数实现PCA
+[COEFF_o SCORE_o latent_o]=pca(data_out);
+pcaData1_o=SCORE_o(:,1:k);         %取前k个主成分
+pcaData2_o =sortrows(pcaData1_o,1); %排序
+
+[COEFF_n SCORE_n latent_n]=pca(data_nest);
+ pcaData1_n=SCORE_n(:,1:k);         %取前k个主成分
+% pcaData2_n =sortrows(pcaData1_n,1); %排序
+
+% [COEFF_n SCORE_n latent_n]=pca(data_midian);
+%  pcaData1_m=SCORE_n(:,1:k);         %取前k个主成分
+
+a=cumsum(latent_o)./sum(latent_o);   % 计算特征的累计贡献率
+idx=find(a>0.8);     % 将特征的累计贡献率不小于0.9的维数作为PCA降维后特征的个数
+m=idx(1);
+
+
+x1=pcaData1_o(1:330,1);
+y1=pcaData1_o(1:330,2);
+% z1=pcaData2_o(:,3);
+% scatter(x1,y1,'p');hold on;
+
+x2=pcaData1_n(:,1);
+y2=pcaData1_n(:,2);
+% z2=pcaData2_n(:,3);
+% scatter(x2,y2,'k');
+
+% x3=pcaData1_m(:,1);
+% y3=pcaData1_m(:,2);
+
+
+plot(x1,y1,'r');hold on;
+plot(x2,y2,'b');hold on;
+% plot(x3,y3,'g');
+
+
+% xlabel('x'),ylabel('y'),zlabel('z');
+
+
+
+
+
